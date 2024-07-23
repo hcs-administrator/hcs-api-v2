@@ -1,0 +1,16 @@
+openapi: 3.1.0
+
+info:
+  title: 'HCS API Server - V2'
+  version: '2.0.0'
+  description: 'This is the documentation for all the API calls used in the various apps for HCS'
+
+servers:
+  - url: 'http://localhost:3000'
+    description: 'Development server'
+  - url: 'https://api.hcs.net.nz'
+    description: 'Production server'
+
+contact:
+  - name: 'Jeff Kranenburg (IT Support)'
+    email: 'jk@hcs.kiwi'
