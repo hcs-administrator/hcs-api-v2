@@ -29,6 +29,9 @@ app.use((req, res, next) => {
 const useMainRouter = require('./__routes/main')
 app.use('/', useMainRouter)
 
+const useVoipRouter = require('./__routes/voip')
+app.use('/voip', useVoipRouter)
+
 // Swagger Themes
 const optionsV1 = {
     explorer: true,

@@ -18,6 +18,8 @@ contact:
 tags:
   - name: Main
     description: Root of the API for testing
+  - name: Voip
+    description: Connect to DISolutions 
 
 paths:
 
@@ -30,3 +32,16 @@ paths:
       responses:
         200:
           description: Root Path - see if it works.
+
+
+  /voip:
+    get:
+      tags:
+        - Voip
+      summary: VOIP API
+      description: Get details from VOIP API, but only when authenticated
+      responses:
+        200:
+          description: Display data....
+        401:
+          description: Does not return data, because you are not authenticated.
