@@ -6,7 +6,7 @@ info:
   description: 'This is the documentation for all the API calls used in the various apps for HCS'
 
 servers:
-  - url: 'http://localhost:3000'
+  - url: 'http://localhost:5000'
     description: 'Development server'
   - url: 'https://api.hcs.net.nz'
     description: 'Production server'
@@ -14,3 +14,19 @@ servers:
 contact:
   - name: 'Jeff Kranenburg (IT Support)'
     email: 'jk@hcs.kiwi'
+
+tags:
+  - name: Main
+    description: Root of the API for testing
+
+paths:
+
+  /:
+    get:
+      tags:
+        - Main
+      summary: Root API
+      description: Just to see if it all works. No other paths are valid.
+      responses:
+        200:
+          description: Root Path - see if it works.
