@@ -29,6 +29,12 @@ app.use((req, res, next) => {
 const useMainRouter = require('./__routes/main')
 app.use('/', useMainRouter)
 
+
+
+
+const useLoginRouter = require('./__routes/login')
+app.use('/login', useLoginRouter)
+
 // Swagger Themes
 const optionsV1 = {
     explorer: true,

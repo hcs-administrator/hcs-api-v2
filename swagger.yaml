@@ -30,3 +30,58 @@ paths:
       responses:
         200:
           description: Root Path - see if it works.
+
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Login API
+      description: Login to gte JWT token before any other paths work
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody: 
+        description: Create a new JWT Token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data: 
+                  type: object
+                  properties:
+                    EID:
+                      type: string
+                    NetworkPassword:
+                      type: string
+                    ID:
+                      type: integer
+                time:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Returns a JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: string
+        '401': 
+          description: Error in Authentication
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: string
+        '405':
+          description: Missing body content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: string
