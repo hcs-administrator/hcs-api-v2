@@ -5,14 +5,20 @@ const jwt = require('jsonwebtoken');
 
 const router = express()
 
-const secretKey = 'your-secret-key';
-
 router.get('/', (req, res) => {
 
-    if (secretKey) {
+    //1: Get token
+    //2: Check if valid
+    //3: Show results
+
+    if (req.query.token) {
+
         res.status(200).send("HCS VOIP")
+
     } else {
+
         res.status(401).send("NO HCS VOIP")
+
     }
 })
 
