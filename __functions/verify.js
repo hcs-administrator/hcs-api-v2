@@ -10,8 +10,12 @@ const { Base64 } = require('js-base64');
 Base64.extendString();
 
 const verify = (token) => {
+
+    console.log(token)
     
     return jwt.verify(token, process.env.JWT_SECRET.toBase64(), function(err, decoded) {
+
+        console.log(decoded)
 
         if (err === null) {
 
