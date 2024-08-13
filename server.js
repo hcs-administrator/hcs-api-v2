@@ -26,13 +26,32 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
-const useMainRouter = require('./__routes/main')
+const useMainRouter = require('./__routes/open/main')
 app.use('/', useMainRouter)
 
-const useLoginRouter = require('./__routes/login')
+const useLoginRouter = require('./__routes/open/login')
 app.use('/login', useLoginRouter)
 
-const useVoipRouter = require('./__routes/voip')
+// May not need this one
+// const useJWTRouter = require('./routes/jwt')
+// app.use('/jwt', useJWTRouter)
+
+// const useGoogleCalendarRouter = require('./__routes/secure/google/calendar')
+// app.use('/gcal', useGoogleCalendarRouter)
+
+// const useGoogleDocsRouter = require('./__routes/secure/google/docs')
+// app.use('/gdoc', useGoogleDocsRouter)
+
+const useOpenNocoRouter = require('./__routes/open/noco')
+app.use('/open-noco', useOpenNocoRouter)
+
+const useNocoRouter = require('./__routes/secure/noco')
+app.use('/noco', useNocoRouter)
+
+// const usePapercutRouter = require('./__routes/secure/papercut')
+// app.use('/pc', usePapercutRouter)
+
+const useVoipRouter = require('./__routes/secure/voip')
 app.use('/voip', useVoipRouter)
 
 // Swagger Themes

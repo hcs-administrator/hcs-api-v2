@@ -1,46 +1,32 @@
 require('dotenv').config()
 
-// const express = require('express')
-// const axios = require('axios')
-// const router = express()
-
 const jwt = require('jsonwebtoken');
 
-const { Base64 } = require('js-base64');
-Base64.extendString();
+const verify = (req, res, next) => {
 
-const verify = (token) => {
+    if( Object.keys(req.body).length <= 0) {
+        res.status(400).json({"ERROR" : "Missing Token"})
+        return;
+    } else {
+        
+        jwt.verify(req.body.token, process.env.JWT_SECRET, (err, decoded) => {
 
-    console.log(token)
-    
-    return jwt.verify(token, process.env.JWT_SECRET.toBase64(), function(err, decoded) {
-
-        console.log(decoded)
-
-        if (err === null) {
-
-            if (decoded.name.issuer === process.env.JWT_ISSUER && decoded.name.audience === process.env.JWT_AUDIENCE) {
-
-                const sub = JSON.parse(decoded.sub.fromBase64(), true)
-
-                return {...sub, "Code" : 200}
-
+            if (err != null) {
+                res.status(401).json({"ERROR" : "Invalid Token"})
+                next();
             } else {
 
-                return {"MSG" : "No User", "Code" : 401}
+                if (decoded.name.issuer === process.env.JWT_ISSUER && decoded.name.audience === process.env.JWT_AUDIENCE) {
+                    res.locals.sub = decoded.sub
+                    res.locals.name = decoded.name
+                    next();
+                } else {
+                    res.status(401).json({"ERROR" : "Invalid Token"})
+                    next();   
+                }
             }
-
-        } else if (err.message === "secret or public key must be provided") {
-
-            return {"MSG" : "Error: Validation Issue", "Code" : 401}
-
-        } else {
-
-            return {"MSG" : "Error: Auth or Issuer issue", "Code" : 401}
-
-        }
-
-    });
+        })    
+    }
 
 }
 
