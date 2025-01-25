@@ -10,9 +10,45 @@ const router = express()
 const bodyParser = require('body-parser')
 router.use(bodyParser.json());
 
+router.post('/me', verify, async (req, res) => {
+
+    if ( req.statusCode === 200 ) {    
+        if (res.locals.sub.AppRole === "Super_Admin") {
+
+            const url = "https://portal.disolutions.co.nz/api/"
+            const params = {
+                "token": process.env.VOIP_TOKEN,
+                "action": "Get-Voice-Users",
+                "context": "voice"
+            }
+        
+            await axios({
+                method: 'post',
+                url,
+                data: params,
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                }
+            }).then(resp => {
+    
+                let data = resp.data.Data.filter( d => d.emailaddress === `${res.locals.sub.EID.toLowerCase()}@hcs.kiwi` )[0]
+        
+                res.status(200).send(data)
+    
+            })
+
+        } else {
+            res.status(400).json({"Error" : "Wrong User Type"})
+        }
+    } else {
+        res.status(401).json({"Error" : "Unauthorized User"})
+    }
+
+})
+
 router.post('/get-users', verify, async (req, res) => {
 
-    if (Object.keys(res.locals).includes('sub')) {
+    if ( req.statusCode === 200 ) {
         if (res.locals.sub.AppRole === "Super_Admin") {
             
             const url = "https://portal.disolutions.co.nz/api/"
@@ -29,33 +65,23 @@ router.post('/get-users', verify, async (req, res) => {
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }
-            }).then(resp => {
-        
-                let data = resp.data.Data
-        
-                res.status(200).send(data)
-        
-            })
+            }).then(resp => res.status(200).send(resp.data.Data))
             
             return;  
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
     } else {
-        // res.send = invalid token from middleware
-        // Needs to return message to frontend for redirect
-        
-        console.log("Test....")
-        return;
+        res.status(401).json({"Error" : "Unauthorized User"})
     }
 
 })
 
 router.post('/get-user/:eid', verify, async (req, res) => {
 
-    if (Object.keys(res.locals).includes('sub')) {
+    if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "Teacher" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
-        
+
             const url = "https://portal.disolutions.co.nz/api/"
             const params = {
                 "token": process.env.VOIP_TOKEN,
@@ -71,34 +97,22 @@ router.post('/get-user/:eid', verify, async (req, res) => {
                     'Access-Control-Allow-Origin': '*'
                 }
             }).then(resp => {
-        
                 let data = resp.data.Data.filter( d => d.emailaddress === `${req.params.eid.toLowerCase()}@hcs.kiwi` )
-        
                 res.status(200).send(data)
-        
             })
-            
-            return;  
+
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
     } else {
-        // res.send = invalid token from middleware
-        // Needs to return message to frontend for redirect
-        
-        console.log("Test....")
-        return;
+        res.status(401).json({"Error" : "Unauthorized User"})
     }
-
 })
 
 router.post('/add-user', verify, async (req, res) => {
 
-    console.log(res.locals)
-
-    if (Object.keys(res.locals).includes('sub')) {
-        if (res.locals.sub.AppRole === "Teacher" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
-        
+    if ( req.statusCode === 200 ) {    
+        if (res.locals.sub.AppRole === "Super_Admin") {
             const url = "https://portal.disolutions.co.nz/api/"
             const params = {
                 "token": process.env.VOIP_TOKEN,
@@ -130,36 +144,20 @@ router.post('/add-user', verify, async (req, res) => {
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }
-            }).then(resp => {
-
-                console.log(resp.data)
-
-                res.status(200).json({"MSG" : "User Created Successfully"})
-                //res.send("Data...")
-        
-            })
-            
-            return;  
+            }).then(resp => res.status(200).json({"MSG" : "User Created Successfully"}))
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
     } else {
-        // res.send = invalid token from middleware
-        // Needs to return message to frontend for redirect
-        
-        console.log("Test....")
-        return;
+        res.status(401).json({"Error" : "Unauthorized User"})
     }
 
 })
 
 router.delete('/remove-user/:id', verify, async (req, res) => {
 
-    console.log(res.locals)
-
-    if (Object.keys(res.locals).includes('sub')) {
-        if (res.locals.sub.AppRole === "Teacher" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
-        
+    if ( req.statusCode === 200 ) {    
+        if (res.locals.sub.AppRole === "Super_Admin") {
             const url = "https://portal.disolutions.co.nz/api/"
             const params = {
                 "token": process.env.VOIP_TOKEN,
@@ -177,70 +175,34 @@ router.delete('/remove-user/:id', verify, async (req, res) => {
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }
-            }).then(resp => {
-
-                console.log(resp.data)
-
-                res.status(200).json({"MSG" : "User Removed Successfully"})
-                //res.send("Data...")
-        
-            })
-            
-            return;  
+            }).then(resp => res.status(200).json({"MSG" : "User Removed Successfully"}))
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
     } else {
-        // res.send = invalid token from middleware
-        // Needs to return message to frontend for redirect
-        
-        console.log("Test....")
-        return;
+        res.status(401).json({"Error" : "Unauthorized User"})
     }
 
 })
 
-router.post('/me', verify, async (req, res) => {
+/*
 
-    if (Object.keys(res.locals).includes('sub')) {
-        if (res.locals.sub.AppRole === "Teacher" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
-        
-            const url = "https://portal.disolutions.co.nz/api/"
-            const params = {
-                "token": process.env.VOIP_TOKEN,
-                "action": "Get-Voice-Users",
-                "context": "voice"
-            }
-        
-            await axios({
-                method: 'post',
-                url,
-                data: params,
-                headers: {
-                    'Access-Control-Allow-Origin': '*'
-                }
-            }).then(resp => {
-    
-                let data = resp.data.Data.filter( d => d.emailaddress === `${res.locals.sub.EID.toLowerCase()}@hcs.kiwi` )
-        
-                res.status(200).send(data)
-    
-            })
-            
-            return;  
+//TEMPLATE
+
+router.post('/get-user/:eid', verify, async (req, res) => {
+
+    if ( req.statusCode === 200 ) {    
+        if (res.locals.sub.AppRole === "Super_Admin") {
+
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
     } else {
-        // res.send = invalid token from middleware
-        // Needs to return message to frontend for redirect
-        
-        console.log("Test....")
-        return;
+        res.status(401).json({"Error" : "Unauthorized User"})
     }
-
 
 })
 
+*/
 
 module.exports = router

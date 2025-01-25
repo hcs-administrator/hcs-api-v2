@@ -28,14 +28,15 @@ router.post('/generate', async (req, res) => {
     let body = req.body.data
     let expiresIn = req.body.time
 
-    let path = "vw_igjbjp94y4sxsx"
+    let selected_table = "md_mhduoowwpvkj7k"
+    let selected_view = "vw_igjbjp94y4sxsx" //Password View
 
     let data = {
         fields: "EID,Id,AppRole", 
         where: `(EID,eq,${body.eid})~and(NetworkPassword,eq,${body.password})` 
     }
 
-    let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/md_mhduoowwpvkj7k/records?viewId=${path}&fields=${data.fields}&where=${data.where}&limit=1&shuffle=0&offset=0`
+    let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&fields=${data.fields}&where=${data.where}&limit=1&shuffle=0&offset=0`
 
     return await axios({
         method: 'GET',
@@ -49,18 +50,24 @@ router.post('/generate', async (req, res) => {
     })
     .then(resp => {
 
-        if (Object.keys(req.body).length === 2) {
+        if(resp.data.list.length > 0) {
 
-            jwt.sign({ sub: resp.data.list[0] , name: { "issuer" : opts.issuer, "audience" : opts.audience  } }, process.env.JWT_SECRET, { expiresIn }, (err, token) => {
-                res.status(200).send(token)
-            })
+            if (Object.keys(req.body).length === 2) {
+
+                jwt.sign({ sub: resp.data.list[0] , name: { "issuer" : opts.issuer, "audience" : opts.audience  } }, process.env.JWT_SECRET, { expiresIn }, (err, token) => {
+                    res.status(200).send(token)
+                })
+    
+            } else {
+
+                jwt.sign({ sub: "", name: "" }, process.env.JWT_SECRET, { expiresIn: '1m' }, (err, token) => {
+                    res.status(405).send(token)
+                })
+    
+            }
 
         } else {
-
-            jwt.sign({ sub: "", name: "" }, process.env.JWT_SECRET, { expiresIn: '1m' }, (err, token) => {
-                res.status(405).send(token)
-            })
-
+            res.status(401).send("NO TOKEN")
         }
 
     })

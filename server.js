@@ -29,8 +29,8 @@ app.use((req, res, next) => {
 const useMainRouter = require('./__routes/open/main')
 app.use('/', useMainRouter)
 
-const useLoginRouter = require('./__routes/open/login')
-app.use('/login', useLoginRouter)
+const useLoginRouter = require('./__routes/open/token')
+app.use('/token', useLoginRouter)
 
 // May not need this one
 // const useJWTRouter = require('./routes/jwt')
