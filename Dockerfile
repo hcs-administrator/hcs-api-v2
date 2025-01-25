@@ -10,6 +10,6 @@ RUN npm i --silent
 
 COPY . .
 
-EXPOSE 80
+EXPOSE 4000
 
 CMD [ "npm", "start" ]

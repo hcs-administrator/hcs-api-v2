@@ -6,7 +6,7 @@ info:
   description: 'This is the documentation for all the API calls used in the various apps for HCS'
 
 servers:
-  - url: 'http://localhost:5000'
+  - url: 'http://localhost:4000'
     description: 'Development server'
   - url: 'https://api.hcs.net.nz'
     description: 'Production server'
@@ -18,6 +18,8 @@ contact:
 tags:
   - name: Main
     description: Root of the API for testing
+  - name: Login
+    description: Get and Using tokens
   - name: Voip
     description: Connect to DISolutions 
 
