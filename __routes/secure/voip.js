@@ -12,8 +12,10 @@ router.use(bodyParser.json());
 
 router.post('/me', verify, async (req, res) => {
 
+    console.log(req.statusCode)
+
     if ( req.statusCode === 200 ) {    
-        if (res.locals.sub.AppRole === "Super_Admin") {
+        if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
 
             const url = "https://portal.disolutions.co.nz/api/"
             const params = {
@@ -49,7 +51,7 @@ router.post('/me', verify, async (req, res) => {
 router.post('/get-users', verify, async (req, res) => {
 
     if ( req.statusCode === 200 ) {
-        if (res.locals.sub.AppRole === "Super_Admin") {
+        if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
             
             const url = "https://portal.disolutions.co.nz/api/"
             const params = {
@@ -77,10 +79,10 @@ router.post('/get-users', verify, async (req, res) => {
 
 })
 
-router.post('/get-user/:eid', verify, async (req, res) => {
+router.post('/get-user/', verify, async (req, res) => {
 
     if ( req.statusCode === 200 ) {    
-        if (res.locals.sub.AppRole === "Teacher" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
+        if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
 
             const url = "https://portal.disolutions.co.nz/api/"
             const params = {
@@ -97,7 +99,7 @@ router.post('/get-user/:eid', verify, async (req, res) => {
                     'Access-Control-Allow-Origin': '*'
                 }
             }).then(resp => {
-                let data = resp.data.Data.filter( d => d.emailaddress === `${req.params.eid.toLowerCase()}@hcs.kiwi` )
+                let data = resp.data.Data.filter( d => d.emailaddress === `${req.body.eid.toLowerCase()}@hcs.kiwi` )
                 res.status(200).send(data)
             })
 

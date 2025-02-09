@@ -14,7 +14,7 @@ router.get('/staff-photos', async (req, res) => {
     let selected_table = "md_mhduoowwpvkj7k"
     let selected_view = "vw_v3op34uzszmd79" //Photos View
 
-    let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&limit=250`
+    let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&limit=250&sort=order`
 
     return await axios({
         method: 'GET',

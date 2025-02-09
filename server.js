@@ -48,8 +48,8 @@ app.use('/open-noco', useOpenNocoRouter)
 const useNocoRouter = require('./__routes/secure/noco')
 app.use('/noco', useNocoRouter)
 
-// const usePapercutRouter = require('./__routes/secure/papercut')
-// app.use('/pc', usePapercutRouter)
+const usePapercutRouter = require('./__routes/secure/papercut')
+app.use('/pc', usePapercutRouter)
 
 const useVoipRouter = require('./__routes/secure/voip')
 app.use('/voip', useVoipRouter)
