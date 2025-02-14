@@ -67,9 +67,12 @@ router.post('/get-users', verify, async (req, res) => {
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }
-            }).then(resp => res.status(200).send(resp.data.Data))
+            }).then(resp => {
+
+                res.status(200).send(resp.data.Data)
+
+            })
             
-            return;  
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
