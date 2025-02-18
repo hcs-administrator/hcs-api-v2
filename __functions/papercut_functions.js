@@ -68,7 +68,7 @@ const load_pc_details = async (user) => {
         },
         httpsAgent: agent
     };
-
+    
     const request = `
     <?xml version="1.0" encoding="UTF-8"?>
     <methodCall>
@@ -124,8 +124,6 @@ const load_pc_details = async (user) => {
         .then(async resp => {
 
             const convert = await parseStringPromise(resp.data)
-
-            // console.log(convert.methodResponse.fault[0].value[0].struct[0].member[0].value[0].int[0])
 
             const all_details = convert.methodResponse.params[0].param[0].value[0].array[0].data[0].value
             return all_details
