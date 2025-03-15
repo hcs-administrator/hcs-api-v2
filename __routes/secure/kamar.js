@@ -67,7 +67,7 @@ router.post('/me', verify, async (req, res) => {
 router.post('/get-user', verify, async (req, res) => {
 
     const id = req.body.id === undefined ? "" : req.body.id
-    const fields = req.body.type === undefined ? [] : req.body.fields
+    const fields = req.body.fields === undefined ? [] : req.body.fields
 
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
