@@ -15,7 +15,9 @@ const {
 
 const router = express()
 
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { parseNumbers } = require('xml2js/lib/processors');
+const { parseString } = require('xml2js');
 router.use(bodyParser.json());
 
 router.post('/me', verify, async (req, res) => {
@@ -74,16 +76,29 @@ router.post('/add-user/', verify, async (req, res) => {
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "Super_Admin") {
 
-            await add_user(
-                req.body.username.toLowerCase(),
-                req.body.password,
-                req.body.fullname,
-                req.body.email.toLowerCase(),
-                req.body.card,
-                req.body.pin,
+            console.log(req.body)
+
+            const resp = await add_user(
+                req.body.data.username.toLowerCase(),
+                req.body.data.password,
+                req.body.data.fullname,
+                req.body.data.email.toLowerCase(),
+                `${req.body.data.card}`,
+                "00000",
+                req.body.data.tutor_group
             )
 
-            res.send("User Added")
+            console.log(resp)
+
+            // `${parseString(req.body.data.pin)}`,
+
+            if ( resp === "1" ) {
+
+                await set_user_balance(req.body.data.username.toLowerCase(), "50.00", "Initial Balance")
+
+            }
+
+            resp === "1" ? res.status(200).send(`${req.body.data.username.toLowerCase()} => User Added`) : res.status(500).send(`${req.body.data.username.toLowerCase()} => User not added`)
 
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
@@ -116,8 +131,8 @@ router.post('/set-user-balance/', verify, async (req, res) => {
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "Super_Admin") {
 
-            await set_user_balance(req.body.username.toLowerCase(), req.body.amount, req.body.comment)
-            res.send(`Balance for ${req.body.username.toLowerCase()} set to ${req.body.amount}`)
+            await set_user_balance(req.body.data.username.toLowerCase(), req.body.data.amount, req.body.data.comment)
+            res.send(`Balance for ${req.body.data.username.toLowerCase()} set to ${req.body.data.amount}`)
 
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
