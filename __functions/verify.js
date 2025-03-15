@@ -45,4 +45,4 @@ const verify = (req, res, next) => {
 
 }
 
-module.exports = { verify, gverify, scopes }
+module.exports = { verify }

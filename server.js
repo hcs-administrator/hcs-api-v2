@@ -54,6 +54,9 @@ app.use('/pc', usePapercutRouter)
 const useVoipRouter = require('./__routes/secure/voip')
 app.use('/voip', useVoipRouter)
 
+const useKamarRouter = require('./__routes/secure/kamar')
+app.use('/kamar', useKamarRouter)
+
 // Swagger Themes
 const optionsV1 = {
     explorer: true,
