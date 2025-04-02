@@ -24,7 +24,7 @@ router.post('/me', verify, async (req, res) => {
             let selected_view = "vw_7rb0y6ojrhg66v" //Photos View
 
             let data = {
-                where: `(EID,eq,${body.eid})` 
+                where: `(EID,eq,${body.eid.toUpperCase()})` 
             }
 
             let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&where=${data.where}&limit=250&sort=order`
@@ -64,7 +64,7 @@ router.post('/name-only', verify, async (req, res) => {
 
             let data = {
                 fields: "EID,FirstName,LastName", 
-                where: `(EID,eq,${body.eid})` 
+                where: `(EID,eq,${body.eid.toUpperCase()})` 
             }
 
             let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&fields=${data.fields}&where=${data.where}&limit=250&sort=order`

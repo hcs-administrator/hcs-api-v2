@@ -33,7 +33,7 @@ router.post('/generate', async (req, res) => {
 
     let data = {
         fields: "EID,Id,AppRole", 
-        where: `(EID,eq,${body.eid})~and(NetworkPassword,eq,${body.password})` 
+        where: `(EID,eq,${body.eid.toUpperCase()})~and(NetworkPassword,eq,${body.password})` 
     }
 
     let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&fields=${data.fields}&where=${data.where}&limit=1&shuffle=0&offset=0`
