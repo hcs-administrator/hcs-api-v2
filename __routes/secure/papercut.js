@@ -76,7 +76,7 @@ router.post('/add-user/', verify, async (req, res) => {
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "Super_Admin") {
 
-            console.log(req.body)
+            // console.log(req.body.data)
 
             const resp = await add_user(
                 req.body.data.username.toLowerCase(),
