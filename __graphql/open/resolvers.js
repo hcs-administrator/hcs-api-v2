@@ -39,7 +39,7 @@ const getToken = async ({ eid, password }) => {
                 eid : eid,
                 password : password
             },
-            time : '1w'
+            time : '1h'
         }
     }
 
