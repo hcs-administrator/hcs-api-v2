@@ -2,6 +2,13 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 
+// GraphQL
+const { buildSchema } = require('graphql');
+const { createHandler } = require('graphql-http/lib/use/express');
+const { ruruHTML } = require('ruru/server');
+const { root } = require('./__graphql/open/resolvers')
+const { schema } = require('./__graphql/open/schema')
+
 // SWAGGER UI
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -57,6 +64,29 @@ app.use('/voip', useVoipRouter)
 const useKamarRouter = require('./__routes/secure/kamar')
 app.use('/kamar', useKamarRouter)
 
+//Graphql Schema and Routes
+// const schema = buildSchema(`type Query { hello: String } `);
+
+// const root = {
+//     hello() {
+//       return 'Hello world!';
+//     },
+// };
+
+app.all(
+  '/graphql',
+  createHandler({
+    schema: schema,
+    rootValue: root,
+  }),
+);
+
+// Serve the GraphiQL IDE.
+app.get('/pg', (_req, res) => {
+    res.type('html');
+    res.end(ruruHTML({ endpoint: '/graphql' }));
+});
+
 // Swagger Themes
 const optionsV1 = {
     explorer: true,
@@ -85,5 +115,7 @@ app.use('/_light', basicAuth({
   users: { '22222' : 'x-api' },
   challenge: true,
 }), swaggerUi.serve, swaggerUi.setup(swaggerSpec, optionsV2));
+
+//Graphql Endpoint
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));
