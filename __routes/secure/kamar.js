@@ -12,8 +12,6 @@ router.use(bodyParser.json());
 
 router.post('/me', verify, async (req, res) => {
 
-    console.log(req.statusCode)
-
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
 
@@ -37,8 +35,6 @@ router.post('/me', verify, async (req, res) => {
 
                 const usercode = res.locals.sub.EID.length < 8 ? res.locals.sub.EID.toUpperCase() : res.locals.sub.EID
 
-                console.log(usercode)
-
                 let user = base.staff.data.filter( d => d.username === usercode)[0]
 
                 if (user === undefined) {
@@ -48,8 +44,6 @@ router.post('/me', verify, async (req, res) => {
                         user = "No User Found"
                     }
                 }
-
-                console.log(user)
         
                 res.status(200).send(user)
     

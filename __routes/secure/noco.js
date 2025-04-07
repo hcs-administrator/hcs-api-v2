@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const router = express()
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 const { verify } = require("../../__functions/verify")
 
 const { proxyList } = require('../../__functions/proxylist')
@@ -15,7 +16,41 @@ router.post('/me', verify, async (req, res) => {
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
 
-            console.log(req.body)
+            let selected_table = "md_mhduoowwpvkj7k"
+            let selected_view = "vw_7rb0y6ojrhg66v" //Photos View
+
+            let data = {
+                where: `(EID,eq,${res.locals.sub.EID.toUpperCase()})` 
+            }
+
+            let url = `${process.env.NOCO_URL}/${process.env.NOCO_URL_TABLE}/${selected_table}/records?viewId=${selected_view}&where=${data.where}&limit=250&sort=order`
+
+            return await axios({
+                method: 'GET',
+                url: url,
+                proxy: proxyList[process.env.PROXY_PASS],
+                headers: {
+                    "xc-token" : process.env.NOCO_TOKEN
+                }
+            })
+            .then(resp => {
+
+                const result = resp.data.list
+
+                res.send(result)
+
+            })
+            .catch(err => console.log(err))
+
+        }
+    }
+
+})
+
+router.post('/get-user', verify, async (req, res) => {
+
+    if ( req.statusCode === 200 ) {    
+        if (res.locals.sub.AppRole === "User" || res.locals.sub.AppRole === "Super_Admin" || res.locals.sub.AppRole === "Admin") {
 
             let body = req.body.data
             //let expiresIn = req.body.time
