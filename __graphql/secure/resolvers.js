@@ -194,30 +194,34 @@ const getVoipUser = async ({ token, user }) => {
     //VOIP
     let config = {
         method: 'POST',
-        url: `${process.env.BASE_URL}/voip/me`,
+        url: `${process.env.BASE_URL}/voip/get-user`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token, eid: user }
     }
 
     return axios(config)
     .then(resp => {
+
+        const user = resp.data[0]
+
         return {
-            "id" : resp.data.id,
-            "accountcode" : resp.data.accountcode,
-            "name" : resp.data.name,
-            "displayname" : resp.data.displayname,
-            "secret" : resp.data.secret,
-            "emailaddress" : resp.data.emailaddress,
-            "mobilenumber" : resp.data.mobilenumber,
-            "callgroup" : resp.data.callgroup,
-            "billinggroup" : resp.data.billinggroup,
-            "extension" : resp.data.extension,
-            "profile" : resp.data.profile,
-            "pinnumber" : resp.data.pinnumber,
-            "callerid" : resp.data.callerid,
-            "primarynumber" : resp.data.primarynumber,
-            "useruniqueid" : resp.data.useruniqueid,
-            "role" : resp.data.role
+            "id" : user.id,
+            "accountcode" : user.accountcode,
+            "name" : user.name,
+            "displayname" : user.displayname,
+            "secret" : user.secret,
+            "emailaddress" : user.emailaddress,
+            "mobilenumber" : user.mobilenumber,
+            "callgroup" : user.callgroup,
+            "billinggroup" : user.billinggroup,
+            "extension" : user.extension,
+            "profile" : user.profile,
+            "pinnumber" : user.pinnumber,
+            "callerid" : user.callerid,
+            "primarynumber" : user.primarynumber,
+            "useruniqueid" : user.useruniqueid,
+            "role" : user.role,
+            // "message" : "User found."
         }
     })
 }
@@ -285,9 +289,9 @@ const getPapercutUser = async ({ token, user }) => {
     //PAPERCUT
     let config = {
         method: 'POST',
-        url: `${process.env.BASE_URL}/pc/me`,
+        url: `${process.env.BASE_URL}/pc/get-user`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token, user }
+        data : { token, eid: user }
     }
 
     return await axios(config)
@@ -355,11 +359,75 @@ const getKamarUser = async ({ token, user }) => {
          }
     })
     .catch(err => console.log(err))
+}
+
+const addVoipUser = async ({ token, name, displayname, password, confirm, emailaddress, extension }) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/voip/add-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, params: { name, displayname, password, confirm, emailaddress, extension } }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        //return { name, extension }
+        return { "message" : resp.data.message }
+    })
+
+}
+
+const deleteVoipUser = async ({ token, id}) => {
+
+    let config = {
+        method: 'DELETE',
+        url: `${process.env.BASE_URL}/voip/remove-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, params: { id } }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { "message" : resp.data.message }
+    })
+
+}
+
+const addPapercutUser = async({token, username, password, fullname, email, card, pin}) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/pc/add-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, data: { username, password, fullname, email, card, pin } }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { "message" : resp.data.message }
+    })
+
+}
+
+const deletePapercutUser = async({token, id}) => {
+
+    let config = {
+        method: 'DELETE',
+        url: `${process.env.BASE_URL}/pc/remove-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, eid: id }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { "message" : resp.data.message }
+    })
 
 }
 
 module.exports = {
-    root : {
+    root2 : {
         getMe,
         getKamarUser,
         getVoipMe,
@@ -367,6 +435,10 @@ module.exports = {
         getVoipUsers,
         getPapercutMe,
         getPapercutUser,
-        getPapercutUsers
+        getPapercutUsers,
+        addVoipUser,
+        deleteVoipUser,
+        addPapercutUser,
+        deletePapercutUser
     }
 }

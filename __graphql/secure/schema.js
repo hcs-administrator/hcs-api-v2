@@ -2,7 +2,11 @@ const express = require('express');
 const { createHandler } = require('graphql-http/lib/use/express');
 const { buildSchema } = require('graphql');
 
-const schema = buildSchema(`
+const schema2 = buildSchema(`
+
+    type Output {
+      message: String
+    }
 
     type NocoUser {
       id: Int
@@ -125,10 +129,17 @@ const schema = buildSchema(`
       getKamarMe(token: String): KamarUser
       getKamarUser(token: String, user: String): KamarUser
     }
-      
+
+    type Mutation {
+        addVoipUser(token: String, name: String, displayname: String, password: String, confirm: String, emailaddress: String, extension: String): Output
+        deleteVoipUser(token: String, id: String): Output
+        addPapercutUser(token: String, username: String, password: String, fullname: String, email: String, card: String, pin: String): Output
+        deletePapercutUser(token: String, id: String): Output
+    }
+
 `);
 
-module.exports = { schema }
+module.exports = { schema2 }
 
 /* 
 

@@ -142,7 +142,7 @@ const add_user = async (username, password, fullname, email, card, pin) => {
     const url = `https://pcserver.hcs.net.nz:9192/rpc/api/xmlrpc`
     const token = process.env.PAPERCUT_TOKEN
     const config = {
-        timeout: 2000,
+        timeout: 20000,
         headers: {
             'Accept': 'text/xml',
             'Content-Type': 'text/xml'
@@ -202,7 +202,6 @@ const add_user = async (username, password, fullname, email, card, pin) => {
         .then(async resp => {
 
             const convert = await parseStringPromise(resp.data)
-            //const user = convert.methodResponse.params[0].param[0].value[0].array[0].data[0].value
             const user = convert.methodResponse.params[0].param[0].value[0].boolean[0]
             return user
         })
@@ -249,8 +248,6 @@ const remove_user = async (name) => {
 
             const convert = await parseStringPromise(resp.data)
             const user = convert.methodResponse.params[0].param[0].value[0].array[0].data[0].value
-
-            console.log(user)
 
             return user
         })

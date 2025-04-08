@@ -6,8 +6,10 @@ const cors = require('cors')
 const { buildSchema } = require('graphql');
 const { createHandler } = require('graphql-http/lib/use/express');
 const { ruruHTML } = require('ruru/server');
-const { root } = require('./__graphql/secure/resolvers')
-const { schema } = require('./__graphql/secure/schema')
+const { root1 } = require('./__graphql/open/resolvers')
+const { root2 } = require('./__graphql/secure/resolvers')
+const { schema1 } = require('./__graphql/open/schema')
+const { schema2 } = require('./__graphql/secure/schema')
 
 // SWAGGER UI
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -68,16 +70,16 @@ app.use('/kamar', useKamarRouter)
 app.all(
   '/open_graphql',
   createHandler({
-    schema: schema,
-    rootValue: root,
+    schema: schema1,
+    rootValue: root1,
   }),
 );
 
 app.all(
   '/secure_graphql',
   createHandler({
-    schema: schema,
-    rootValue: root,
+    schema: schema2,
+    rootValue: root2,
   }),
 );
 

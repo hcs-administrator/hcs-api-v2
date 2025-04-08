@@ -58,7 +58,7 @@ const getTokenWithTime = async ({ eid, password, time }) => {
 
 
 module.exports = {
-    root : {
+    root1 : {
         getToken,
         getTokenWithTime
     }

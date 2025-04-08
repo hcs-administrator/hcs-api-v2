@@ -149,7 +149,14 @@ router.post('/add-user', verify, async (req, res) => {
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }
-            }).then(resp => res.status(200).json({"MSG" : "User Created Successfully"}))
+            }).then(resp => {
+                if (resp.data.Result == 1) {
+                    return res.status(200).json({"message" : resp.data.Message})
+                }
+                else if (resp.data.Result == 0) {
+                    return res.status(409).json({"message" : resp.data.Message})
+                } 
+            })
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }
@@ -159,7 +166,7 @@ router.post('/add-user', verify, async (req, res) => {
 
 })
 
-router.delete('/remove-user/:id', verify, async (req, res) => {
+router.delete('/remove-user', verify, async (req, res) => {
 
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "Super_Admin") {
@@ -169,7 +176,7 @@ router.delete('/remove-user/:id', verify, async (req, res) => {
                 "action": "Delete-Voice-User",
                 "context": "voice",
                 "params" : {
-                    "useruniqueid" : req.params.id
+                    "useruniqueid" : req.body.params.id
                 }
             }
         
@@ -180,7 +187,16 @@ router.delete('/remove-user/:id', verify, async (req, res) => {
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }
-            }).then(resp => res.status(200).json({"MSG" : "User Removed Successfully"}))
+            }).then(resp => {
+
+                if (resp.data.Result == 1) {
+                    return res.status(200).json({"message" : resp.data.Message})
+                }
+                else if (resp.data.Result == 0) {
+                    return res.status(400).json({"message" : resp.data.Message})
+                } 
+
+            })
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
         }

@@ -76,7 +76,7 @@ router.post('/add-user/', verify, async (req, res) => {
     if ( req.statusCode === 200 ) {    
         if (res.locals.sub.AppRole === "Super_Admin") {
 
-            // console.log(req.body.data)
+            console.log(req.body)
 
             const resp = await add_user(
                 req.body.data.username.toLowerCase(),
@@ -88,17 +88,11 @@ router.post('/add-user/', verify, async (req, res) => {
                 req.body.data.tutor_group
             )
 
-            console.log(resp)
-
-            // `${parseString(req.body.data.pin)}`,
-
             if ( resp === "1" ) {
-
                 await set_user_balance(req.body.data.username.toLowerCase(), "50.00", "Initial Balance")
-
             }
 
-            resp === "1" ? res.status(200).send(`${req.body.data.username.toLowerCase()} => User Added`) : res.status(500).send(`${req.body.data.username.toLowerCase()} => User not added`)
+            resp === "1" ? res.status(200).send({"message" : `${req.body.data.username.toLowerCase()} => User Added`}) : res.status(500).send({"message" : `${req.body.data.username.toLowerCase()} => User not added`})
 
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
@@ -115,7 +109,7 @@ router.delete('/remove-user/', verify, async (req, res) => {
         if (res.locals.sub.AppRole === "Super_Admin") {
 
             await remove_user(req.body.eid.toLowerCase())
-            res.send("USER REMOVED")
+            res.send({"message" : `${req.body.eid.toLowerCase()} => USER REMOVED`})
 
         } else {
             res.status(400).json({"Error" : "Wrong User Type"})
