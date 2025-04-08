@@ -6,8 +6,8 @@ const cors = require('cors')
 const { buildSchema } = require('graphql');
 const { createHandler } = require('graphql-http/lib/use/express');
 const { ruruHTML } = require('ruru/server');
-const { root } = require('./__graphql/open/resolvers')
-const { schema } = require('./__graphql/open/schema')
+const { root } = require('./__graphql/secure/resolvers')
+const { schema } = require('./__graphql/secure/schema')
 
 // SWAGGER UI
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -65,16 +65,16 @@ const useKamarRouter = require('./__routes/secure/kamar')
 app.use('/kamar', useKamarRouter)
 
 //Graphql Schema and Routes
-// const schema = buildSchema(`type Query { hello: String } `);
-
-// const root = {
-//     hello() {
-//       return 'Hello world!';
-//     },
-// };
+app.all(
+  '/open_graphql',
+  createHandler({
+    schema: schema,
+    rootValue: root,
+  }),
+);
 
 app.all(
-  '/graphql',
+  '/secure_graphql',
   createHandler({
     schema: schema,
     rootValue: root,
@@ -82,9 +82,14 @@ app.all(
 );
 
 // Serve the GraphiQL IDE.
-app.get('/pg', (_req, res) => {
+app.get('/pg1', (_req, res) => {
     res.type('html');
-    res.end(ruruHTML({ endpoint: '/graphql' }));
+    res.end(ruruHTML({ endpoint: '/open_graphql' }));
+});
+
+app.get('/pg2', (_req, res) => {
+  res.type('html');
+  res.end(ruruHTML({ endpoint: '/secure_graphql' }));
 });
 
 // Swagger Themes
