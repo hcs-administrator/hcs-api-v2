@@ -127,7 +127,8 @@ const schema2 = buildSchema(`
       getPapercutUser(token: String, user: String): PapercutUser
       getPapercutUsers(token: String): [String]
       getKamarMe(token: String): KamarUser
-      getKamarUser(token: String, user: String): KamarUser
+      getKamarUser(token: String, id: String, fields: [String]): KamarUser
+      getKamarUsers(token: String, type: String, fields: [String]): [KamarUser]
     }
 
     type Mutation {

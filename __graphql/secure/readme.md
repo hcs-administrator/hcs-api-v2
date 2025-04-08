@@ -91,3 +91,55 @@ mutation deletePapercutUser($token: String, $username: String) {
     "pin" : "9966"
 }
 ```
+
+# KAMAR Queries
+
+Note that KAMAR queries pull data directly from KAMAR and there is no write function in their API, so only read queries are provided below
+
+```
+#Ability to set fields, should you need them - if a a lot of data is queried then it could save traffic
+query K1($token:String, $type: String, $fields: [String]) {
+  getKamarUsers(token: $token, type: $type, fields:$fields) {
+   	name
+    username
+    email
+  }
+}
+
+#Fields are set to [], so that you only need to filter them in the query itself.
+query K1a($token:String, $type: String) {
+  getKamarUsers(token: $token, type: $type, fields:[]) {
+   	name
+    username
+    email
+  }
+}
+
+#Ability to set fields, should you need them - although a single object does not send a lot of data, the option is nice, could be for security
+query K2($token:String, $id: String, $fields: [String]) {
+  getKamarUser(token: $token, id: $id, fields: $fields) {
+   	name
+    username
+    email
+  }
+}
+
+#Fields are set to [], so that you only need to filter them in the query itself.
+query K2a($token:String, $id: String) {
+  getKamarUser(token: $token, id: $id, fields:[]) {
+   	name
+    username
+    email
+  }
+}
+```
+
+```
+{	
+    "token": "SUPER_ADMIN",
+  	"id" : "ethkra52",
+    "type" : "staff",
+  	"fields" : ["username"]
+}
+```
+

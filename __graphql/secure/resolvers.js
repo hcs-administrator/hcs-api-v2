@@ -261,6 +261,39 @@ const getVoipUsers = async ({ token, user }) => {
     })
 }
 
+const addVoipUser = async ({ token, name, displayname, password, confirm, emailaddress, extension }) => {
+    
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/voip/add-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, params: { name, displayname, password, confirm, emailaddress, extension } }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        //return { name, extension }
+        return { "message" : resp.data.message }
+    })
+
+}
+
+const deleteVoipUser = async ({ token, id}) => {
+
+    let config = {
+        method: 'DELETE',
+        url: `${process.env.BASE_URL}/voip/remove-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, params: { id } }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { "message" : resp.data.message }
+    })
+
+}
+
 const getPapercutMe = async ({ token }) => {
     //PAPERCUT
     let config = {
@@ -321,79 +354,6 @@ const getPapercutUsers = async ({ token }) => {
     return await axios(config).then(resp => resp.data)
 }
 
-const getKamarUser = async ({ token, user }) => {
-
-    //KAMAR
-    let config = {
-        method: 'POST',
-        url: `${process.env.BASE_URL}/kamar/get-user`,
-        proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token, id: user }
-    }
-
-    return await axios(config)
-    .then(resp => {
-        return { 
-            "id": resp.data.id,
-            "uuid": resp.data.uuid,
-            "role": resp.data.role,
-            "created": resp.data.created,
-            "uniqueid": resp.data.uniqueid,
-            "schoolindex": resp.data.schoolindex,
-            "username": resp.data.username,
-            "title": resp.data.title,
-            "firstname": resp.data.firstname,
-            "lastname": resp.data.lastname,
-            "name" : `${resp.data.firstname} ${resp.data.lastname}`,
-            "gender": resp.data.gender,
-            "datebirth": resp.data.datebirth,
-            "classification": resp.data.classification,
-            "position": resp.data.position,
-            "house": resp.data.house,
-            "startingdate": resp.data.startingdate,
-            "photocopierid": resp.data.photocopierid,
-            "email": resp.data.email,
-            "mobile": resp.data.mobile,
-            "extension": resp.data.extension,
-            "groups": resp.data.groups
-         }
-    })
-    .catch(err => console.log(err))
-}
-
-const addVoipUser = async ({ token, name, displayname, password, confirm, emailaddress, extension }) => {
-
-    let config = {
-        method: 'POST',
-        url: `${process.env.BASE_URL}/voip/add-user`,
-        proxy: proxyList[process.env.PROXY_PASS],
-        data : { token, params: { name, displayname, password, confirm, emailaddress, extension } }
-    }
-
-    return await axios(config)
-    .then(resp => {
-        //return { name, extension }
-        return { "message" : resp.data.message }
-    })
-
-}
-
-const deleteVoipUser = async ({ token, id}) => {
-
-    let config = {
-        method: 'DELETE',
-        url: `${process.env.BASE_URL}/voip/remove-user`,
-        proxy: proxyList[process.env.PROXY_PASS],
-        data : { token, params: { id } }
-    }
-
-    return await axios(config)
-    .then(resp => {
-        return { "message" : resp.data.message }
-    })
-
-}
-
 const addPapercutUser = async({token, username, password, fullname, email, card, pin}) => {
 
     let config = {
@@ -426,18 +386,102 @@ const deletePapercutUser = async({token, id}) => {
 
 }
 
+const getKamarUser = async ({ token, id, fields }) => {
+
+    //KAMAR
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/kamar/get-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, id, fields }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { 
+            "id": resp.data.id,
+            "uuid": resp.data.uuid,
+            "role": resp.data.role,
+            "created": resp.data.created,
+            "uniqueid": resp.data.uniqueid,
+            "schoolindex": resp.data.schoolindex,
+            "username": resp.data.username,
+            "title": resp.data.title,
+            "firstname": resp.data.firstname,
+            "lastname": resp.data.lastname,
+            "name" : `${resp.data.firstname} ${resp.data.lastname}`,
+            "gender": resp.data.gender,
+            "datebirth": resp.data.datebirth,
+            "classification": resp.data.classification,
+            "position": resp.data.position,
+            "house": resp.data.house,
+            "startingdate": resp.data.startingdate,
+            "photocopierid": resp.data.photocopierid,
+            "email": resp.data.email,
+            "mobile": resp.data.mobile,
+            "extension": resp.data.extension,
+            "groups": resp.data.groups
+         }
+        })
+        .catch(err => console.log(err))
+}
+
+const getKamarUsers = async ({token, type, fields}) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/kamar/get-users`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, type, fields }
+    }
+
+    return await axios(config)
+    .then(resp => {
+
+        return resp.data.map(user => {
+
+            return { 
+                "id": user.id,
+                "uuid": user.uuid,
+                "role": user.role,
+                "created": user.created,
+                "uniqueid": user.uniqueid,
+                "schoolindex": user.schoolindex,
+                "username": user.username,
+                "title": user.title,
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "name" : `${user.firstname} ${user.lastname}`,
+                "gender": user.gender,
+                "datebirth": user.datebirth,
+                "classification": user.classification,
+                "position": user.position,
+                "house": user.house,
+                "startingdate": user.startingdate,
+                "photocopierid": user.photocopierid,
+                "email": user.email,
+                "mobile": user.mobile,
+                "extension": user.extension,
+                "groups": user.groups
+             }
+        })
+    })
+    .catch(err => console.log(err))
+}
+
 module.exports = {
     root2 : {
         getMe,
         getKamarUser,
+        getKamarUsers,
         getVoipMe,
         getVoipUser,
         getVoipUsers,
+        addVoipUser,
+        deleteVoipUser,
         getPapercutMe,
         getPapercutUser,
         getPapercutUsers,
-        addVoipUser,
-        deleteVoipUser,
         addPapercutUser,
         deletePapercutUser
     }
