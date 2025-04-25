@@ -15,7 +15,7 @@ const getMe = async ({ token }) => {
         method: 'POST',
         url: `${process.env.BASE_URL}/kamar/me`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token }
     }
 
     //NOCO
@@ -23,7 +23,7 @@ const getMe = async ({ token }) => {
         method: 'POST',
         url: `${process.env.BASE_URL}/noco/me`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token }
     }
 
 
@@ -32,7 +32,7 @@ const getMe = async ({ token }) => {
         method: 'POST',
         url: `${process.env.BASE_URL}/pc/me`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token }
     }
 
     //VOIP
@@ -40,7 +40,7 @@ const getMe = async ({ token }) => {
         method: 'POST',
         url: `${process.env.BASE_URL}/voip/me`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token }
     }
 
     return await axios(config)
@@ -158,13 +158,135 @@ const getMe = async ({ token }) => {
     .catch(err => console.log(err))
 }
 
+const getMe2 = async ({ token }) => {
+
+        //MARK : WORK IN PROGRESS FOR OPTIMIZATIONS
+
+        //KAMAR
+        let config = {
+            method: 'POST',
+            url: `${process.env.BASE_URL}/kamar/me`,
+            proxy: proxyList[process.env.PROXY_PASS],
+            data : { token }
+        }
+
+        let result1 = await axios(config)
+    
+        //NOCO
+        let config2 = {
+            method: 'POST',
+            url: `${process.env.BASE_URL}/noco/me`,
+            proxy: proxyList[process.env.PROXY_PASS],
+            data : { token }
+        }
+
+        let result2 = await axios(config2)
+    
+    
+        //PAPERCUT
+        let config3 = {
+            method: 'POST',
+            url: `${process.env.BASE_URL}/pc/me`,
+            proxy: proxyList[process.env.PROXY_PASS],
+            data : { token }
+        }
+
+        let result3 = await axios(config3)
+
+        //VOIP
+        let config4 = {
+            method: 'POST',
+            url: `${process.env.BASE_URL}/voip/me`,
+            proxy: proxyList[process.env.PROXY_PASS],
+            data : { token }
+        }
+
+        let result4 = await axios(config4)
+
+        // console.log(result1.data)
+        console.log(result2.data[0])
+        // console.log(result3.data)
+        // console.log(result4.data)
+
+        return {
+            "id": result1.data.id,
+            "uuid": result1.data.uuid,
+            "role": result1.data.role,
+            "created": result1.data.created,
+            "uniqueid": result1.data.uniqueid,
+            "schoolindex": result1.data.schoolindex,
+            "title": result1.data.title,
+            "firstname": result1.data.firstname,
+            "lastname": result1.data.lastname,
+            "name" : `${result1.data.firstname} ${result1.data.lastname}`,
+            "gender": result1.data.gender,
+            "datebirth": result1.data.datebirth,
+            "classification": result1.data.classification,
+            "position": result1.data.position,
+            "house": result1.data.house,
+            "startingdate": result1.data.startingdate,
+            "email": result1.data.email,
+            "mobile": result1.data.mobile,
+            "groups": result1.data.groups,
+            "noco": {
+                "id" : result2.data[0].Id,
+                "name" : `${result2.data[0].FirstName} ${result2.data[0].LastName}`,
+                "firstname": result2.data[0].FirstName,
+                "lastname": result2.data[0].LastName,
+                "createdat": result2.data[0].CreatedAt,
+                "updatedat": result2.data[0].UpdatedAt,
+                "eid": result2.data[0].EID,
+                "email": result2.data[0].Email,
+                "approle": result2.data[0].AppRole,
+                "issmt": result2.data[0].isSMT,
+                "newthisyear": result2.data[0].newThisYear,
+                "department": result2.data[0].Department,
+                "dept_order": result2.data[0].Dept_Order,
+                "order": result2.data[0].Order,
+                "role1": result2.data[0].Role1,
+                "role2": result2.data[0].Role2,
+                "networkpassword": result2.data[0].NetworkPassword,
+                "devices1": result2.data[0].Devices1,
+                "ipadcode": result2.data[0].iPadCode,
+                "macpassword": result2.data[0].MacPassword,
+                "tumu_pin": result2.data[0].TUMU_PIN,
+                "tumu_id": result2.data[0].TUMU_ID,
+                "tecom_user_id": result2.data[0].Tecom_User_ID,
+                "tecom_user_pin": result2.data[0].Tecom_User_PIN,
+                "tecom_fob_id": result2.data[0].Tecom_Fob_ID,
+                "tecom_fob_number": result2.data[0].Tecom_Fob_Number,
+                "fobs": result2.data[0].Fobs,
+                "alarm_areas": result2.data[0]['Admin-Areas'],
+                "admin_roles": result2.data[0]['Admin-Roles'],
+                "isactive": result2.data[0].isActive,
+                "hasphoto": result2.data[0].hasPhoto,
+                "year": result2.data[0].Year,
+                "qualifications": result2.data[0].Qualifications,
+                "admin_rights": result2.data[0]['Admin-Rights'],
+                "googleid": result2.data[0].GoogleID
+            },
+            "printing" : {
+                "name" : result3.data[0], 
+                "email" : result3.data[1], 
+                "balance" : result3.data[2], 
+                "department" : result3.data[3], 
+                "office" : result3.data[4], 
+                "internal" : result3.data[5], 
+                "total_page" : result3.data[6], 
+                "total_jobs" : result3.data[7]
+            },
+            "voip" : result4.data
+        }
+
+}
+
 const getVoipMe = async ({ token }) => {
     //VOIP
     let config = {
         method: 'POST',
         url: `${process.env.BASE_URL}/voip/me`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token }
     }
 
     return axios(config)
@@ -226,7 +348,7 @@ const getVoipUser = async ({ token, user }) => {
     })
 }
 
-const getVoipUsers = async ({ token, user }) => {
+const getVoipUsers = async ({ token }) => {
     //VOIP
     let config = {
         method: 'POST',
@@ -300,7 +422,7 @@ const getPapercutMe = async ({ token }) => {
         method: 'POST',
         url: `${process.env.BASE_URL}/pc/me`,
         proxy: proxyList[process.env.PROXY_PASS],
-        data : { token : token }
+        data : { token }
     }
 
     return await axios(config)
@@ -469,9 +591,356 @@ const getKamarUsers = async ({token, type, fields}) => {
     .catch(err => console.log(err))
 }
 
+const getNocoStaffMe = async ({ token }) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/noco/me`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token }
+    }
+
+    return axios(config)
+    .then(resp => {
+
+        const user = resp.data[0]
+
+        return {
+            "id" : user.Id,
+            "name" : `${user.FirstName} ${user.LastName}`,
+            "firstname": user.FirstName,
+            "lastname": user.LastName,
+            "createdat": user.CreatedAt,
+            "updatedat": user.UpdatedAt,
+            "eid": user.EID,
+            "email": user.Email,
+            "approle": user.AppRole,
+            "devices1": user.Devices1,
+            "service_accounts": user['Service Accounts'],
+            "issmt": user.isSMT,
+            "newthisyear": user.newThisYear,
+            "dept_order": user.Dept_Order,
+            "order": user.Order,
+            "role1": user.Role1,
+            "role2": user.Role2,
+            "networkpassword": user.NetworkPassword,
+            "macpassword": user.MacPassword,
+            "ipadcode": user.iPadCode,
+            "tumu_pin": user.TUMU_PIN,
+            "tumu_id": user.TUMU_ID,
+            "tecom_user_id": user.Tecom_User_ID,
+            "tecom_user_pin": user.Tecom_User_PIN,
+            "tecom_fob_id": user.Tecom_Fob_ID,
+            "tecom_fob_number": user.Tecom_Fob_Number,
+            "fobs": user.Fobs,
+            "phonelogin": user.PhoneLogin,
+            "phoneext": user.PhoneExt,
+            "admin_roles": user['Admin-Roles'],
+            "mathletics": user.Mathletics,
+            "alarm_areas": user['Admin-Areas'],
+            "readingeggs": user.Readingeggs,
+            "isactive": user.isActive,
+            "hasphoto": user.hasPhoto,
+            "year": user.Year,
+            "qualifications": user.Qualifications,
+            "admin_rights": user['Admin-Rights'],
+            "department": user.Department,
+            "googleid": user.GoogleID
+        }
+    })
+}
+
+const getNocoStaffSingle = async ({ token, id }) => {
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/noco/get-user`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, data : { eid: id } }
+    }
+
+    return axios(config)
+    .then(resp => {
+
+        const user = resp.data[0]
+
+        return {
+            "id" : user.Id,
+            "name" : `${user.FirstName} ${user.LastName}`,
+            "firstname": user.FirstName,
+            "lastname": user.LastName,
+            "createdat": user.CreatedAt,
+            "updatedat": user.UpdatedAt,
+            "eid": user.EID,
+            "email": user.Email,
+            "approle": user.AppRole,
+            "devices1": user.Devices1,
+            "service_accounts": user['Service Accounts'],
+            "issmt": user.isSMT,
+            "newthisyear": user.newThisYear,
+            "dept_order": user.Dept_Order,
+            "order": user.Order,
+            "role1": user.Role1,
+            "role2": user.Role2,
+            "networkpassword": user.NetworkPassword,
+            "macpassword": user.MacPassword,
+            "ipadcode": user.iPadCode,
+            "tumu_pin": user.TUMU_PIN,
+            "tumu_id": user.TUMU_ID,
+            "tecom_user_id": user.Tecom_User_ID,
+            "tecom_user_pin": user.Tecom_User_PIN,
+            "tecom_fob_id": user.Tecom_Fob_ID,
+            "tecom_fob_number": user.Tecom_Fob_Number,
+            "fobs": user.Fobs,
+            "phonelogin": user.PhoneLogin,
+            "phoneext": user.PhoneExt,
+            "admin_roles": user['Admin-Roles'],
+            "mathletics": user.Mathletics,
+            "alarm_areas": user['Admin-Areas'],
+            "readingeggs": user.Readingeggs,
+            "isactive": user.isActive,
+            "hasphoto": user.hasPhoto,
+            "year": user.Year,
+            "qualifications": user.Qualifications,
+            "admin_rights": user['Admin-Rights'],
+            "department": user.Department,
+            "googleid": user.GoogleID
+        }
+    })
+}
+
+const getNocoStaffAll = async ({ token }) => {
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/noco/get-users`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token }
+    }
+
+    return axios(config)
+    .then(resp => {
+
+        const users = resp.data
+
+        console.log(users)
+
+        return users.map(user => {
+            return {
+                "id" : user.Id,
+                "name" : `${user.FirstName} ${user.LastName}`,
+                "firstname": user.FirstName,
+                "lastname": user.LastName,
+                "createdat": user.CreatedAt,
+                "updatedat": user.UpdatedAt,
+                "eid": user.EID,
+                "email": user.Email,
+                "approle": user.AppRole,
+                "devices1": user.Devices1,
+                "service_accounts": user['Service Accounts'],
+                "issmt": user.isSMT,
+                "newthisyear": user.newThisYear,
+                "dept_order": user.Dept_Order,
+                "order": user.Order,
+                "role1": user.Role1,
+                "role2": user.Role2,
+                "networkpassword": user.NetworkPassword,
+                "macpassword": user.MacPassword,
+                "ipadcode": user.iPadCode,
+                "tumu_pin": user.TUMU_PIN,
+                "tumu_id": user.TUMU_ID,
+                "tecom_user_id": user.Tecom_User_ID,
+                "tecom_user_pin": user.Tecom_User_PIN,
+                "tecom_fob_id": user.Tecom_Fob_ID,
+                "tecom_fob_number": user.Tecom_Fob_Number,
+                "fobs": user.Fobs,
+                "phonelogin": user.PhoneLogin,
+                "phoneext": user.PhoneExt,
+                "admin_roles": user['Admin-Roles'],
+                "mathletics": user.Mathletics,
+                "alarm_areas": user['Admin-Areas'],
+                "readingeggs": user.Readingeggs,
+                "isactive": user.isActive,
+                "hasphoto": user.hasPhoto,
+                "year": user.Year,
+                "qualifications": user.Qualifications,
+                "admin_rights": user['Admin-Rights'],
+                "department": user.Department,
+                "googleid": user.GoogleID
+            }
+        })
+
+    })
+}
+
+const getNocoStudentMe = async ({ token }) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/noco/me-student`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token }
+    }
+
+    return axios(config)
+    .then(resp => {
+
+        const user = resp.data[0]
+
+        return {
+            "id": user.Id,
+            "name" : `${user.Firstname} ${user.Lastname}`,
+            "firstname": user.Firstname,
+            "lastname": user.Lastname,
+            "createdat": user.CreatedAt,
+            "updatedat": user.UpdatedAt,
+            "username": user.Username,
+            "email": user.Email,
+            "password": user.Password,
+            "house": user.House,
+            "dob": user.dob,
+            "gender": user.Gender,
+            "yearlevel" : user.YearLevel,
+            "tutorgroup": user.TutorGroup,
+            "hasNetworkAccess": user.HasNetworkAccess,
+            "firstattendance": user.FirstAttendance,
+            "studentId": user.StudentID,
+            "kamar_password_changed": user.KamarChanged
+        }
+    })
+}
+
+const getNocoStudent = async ({ token, id }) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/noco/get-student`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, data : { Username: id } }
+    }
+
+    return axios(config)
+    .then(resp => {
+
+        const user = resp.data[0]
+
+        console.log(user)
+
+        return {
+            "id": user.Id,
+            "name" : `${user.Firstname} ${user.Lastname}`,
+            "firstname": user.Firstname,
+            "lastname": user.Lastname,
+            "createdat": user.CreatedAt,
+            "updatedat": user.UpdatedAt,
+            "username": user.Username,
+            "email": user.Email,
+            "password": user.Password,
+            "house": user.House,
+            "dob": user.dob,
+            "gender": user.Gender,
+            "yearlevel" : user.YearLevel,
+            "tutorgroup": user.TutorGroup,
+            "hasNetworkAccess": user.HasNetworkAccess,
+            "firstattendance": user.FirstAttendance,
+            "studentId": user.StudentID,
+            "kamar_password_changed": user.KamarChanged
+        }
+    })
+
+}
+
+const getNocoStudents = async ({ token }) => {
+
+    let config = {
+        method: 'POST',
+        url: `${process.env.BASE_URL}/noco/get-students`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token }
+    }
+
+    return axios(config)
+    .then(resp => {
+
+        const users = resp.data
+
+        return users.map(user => {
+            return {
+                "id": user.Id,
+                "name" : `${user.Firstname} ${user.Lastname}`,
+                "firstname": user.Firstname,
+                "lastname": user.Lastname,
+                "createdat": user.CreatedAt,
+                "updatedat": user.UpdatedAt,
+                "username": user.Username,
+                "email": user.Email,
+                "password": user.Password,
+                "house": user.House,
+                "dob": user.dob,
+                "gender": user.Gender,
+                "yearlevel" : user.YearLevel,
+                "tutorgroup": user.TutorGroup,
+                "hasNetworkAccess": user.HasNetworkAccess,
+                "firstattendance": user.FirstAttendance,
+                "studentId": user.StudentID,
+                "kamar_password_changed": user.KamarChanged
+            }
+        })
+
+    })
+
+}
+
+const addNocoStaff = async ({ token }) => {
+    return { "message" : "NEED TO DO" }
+}
+
+const addNocoStudent = async ({ token }) => {
+    return { "message" : "NEED TO DO" }
+}
+
+const deleteNocoStaff = async ({ token }) => {
+    return { "message" : "NEED TO DO" }
+}
+
+const deleteNocoStudent = async ({ token }) => {
+    return { "message" : "NEED TO DO" }
+}
+
+const updateNocoStaff = async ({ token, eid, data }) => {
+
+    let config = {
+        method: 'PATCH',
+        url: `${process.env.BASE_URL}/noco/update-staff`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, data, eid }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { "message" : resp.data.message }
+    })
+
+}
+
+const updateNocoStudent = async ({ token, Username, data }) => {
+
+    let config = {
+        method: 'PATCH',
+        url: `${process.env.BASE_URL}/noco/update-student`,
+        proxy: proxyList[process.env.PROXY_PASS],
+        data : { token, data, Username }
+    }
+
+    return await axios(config)
+    .then(resp => {
+        return { "message" : JSON.stringify(resp.data) }
+    })
+}
+
+
 module.exports = {
     root2 : {
         getMe,
+        getMe2,
         getKamarUser,
         getKamarUsers,
         getVoipMe,
@@ -483,6 +952,18 @@ module.exports = {
         getPapercutUser,
         getPapercutUsers,
         addPapercutUser,
-        deletePapercutUser
+        deletePapercutUser,
+        getNocoStaffMe,
+        getNocoStaffSingle,
+        getNocoStaffAll,
+        getNocoStudentMe,
+        getNocoStudent,
+        getNocoStudents,
+        addNocoStaff,
+        addNocoStudent,
+        deleteNocoStaff,
+        deleteNocoStudent,
+        updateNocoStaff,
+        updateNocoStudent
     }
 }

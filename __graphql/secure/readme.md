@@ -143,3 +143,105 @@ query K2a($token:String, $id: String) {
 }
 ```
 
+# NOCO Queries - Staff
+
+```
+query N1($token: String) {
+  getNocoStaffMe(token: $token) {
+    name
+    email
+    dept_order
+  }
+}
+
+query N2($token: String, $id: String) {
+  getNocoStaffSingle(token: $token, id: $id) {
+    name
+    email
+    dept_order
+  }
+}
+
+query N3($token: String) {
+  getNocoStaffAll(token: $token) {
+    name
+    email
+    dept_order
+    macpassword 
+  }
+}
+```
+```
+{	
+    "token": "SUPER_ADMIN",
+  	"id" : "bh"
+}
+```
+
+# NOCO Queries - Students
+
+```
+query N1($token: String) {
+  getNocoStudentMe(token: $token) {
+    id
+    firstname
+    lastname
+    name
+    yearlevel
+  }
+}
+
+query N2($token: String, $id: String) {
+  getNocoStudent(token: $token, id: $id) {
+    id
+    firstname
+    lastname
+    name
+    yearlevel
+  }
+}
+
+query N3($token: String) {
+  getNocoStudents(token: $token) {
+    name
+    email
+    yearlevel
+  }
+}
+```
+```
+{	
+    "token": "Super_Student",
+  	"id" : "animin95"
+}
+```
+
+# GET ME 2 
+
+An updated version of where I want to take this API, so it stops double code
+
+```
+query GM2($token: String){
+  getMe2(token: $token) {
+    name
+    noco {
+      eid
+      networkpassword
+			isactive
+    }
+    voip {
+      useruniqueid
+      primarynumber
+      extension
+    }
+    printing {
+      email
+    }
+  }
+}
+```
+```
+{	
+    "token": "SUPER_ADMIN"
+}
+```

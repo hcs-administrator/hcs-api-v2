@@ -8,7 +8,7 @@ const schema2 = buildSchema(`
       message: String
     }
 
-    type NocoUser {
+    type NocoStaff {
       id: Int
       firstname: String
       lastname: String
@@ -49,6 +49,27 @@ const schema2 = buildSchema(`
       admin_rights: Int
       department: String
       googleid: String 
+    }
+
+    type NocoStudent {
+      id: Int
+      firstname: String
+      lastname: String
+      name: String
+      createdat: String
+      updatedat: String
+      username: String
+      email: String
+      password: String
+      house: String
+      dob: String
+      gender: String
+      yearlevel: Int
+      tutorgroup: String
+      hasNetworkAccess: String
+      firstattendance: String
+      studentId: String
+      kamar_password_changed: Int
     }
 
     type VOIPUser {
@@ -112,14 +133,47 @@ const schema2 = buildSchema(`
     }
 
     type Me {
-      noco: NocoUser
+      noco: NocoStaff
       kamar: KamarUser
       papercut: PapercutUser
       voip: VOIPUser
     }
+
+    type Me2 {
+      id: String
+      uuid: String
+      role: String
+      created: Int
+      uniqueid: String
+      schoolindex: [Int]
+      title: String
+      firstname: String
+      lastname: String
+      name: String
+      gender: String
+      datebirth: Int
+      classification: String
+      position: String
+      house: String
+      startingdate: Int
+      email: String
+      mobile: String
+      noco: NocoStaff
+      voip: VOIPUser
+      printing: PapercutUser
+      groups: [Group]
+    }
+
+    input Data {
+      key: String!
+      vstring: String
+      vnumber: Int
+      vdouble: Float
+    }
      
     type Query {
       getMe(token: String): Me
+      getMe2(token: String): Me2
       getVoipMe(token: String): VOIPUser
       getVoipUser(token: String, user: String): VOIPUser
       getVoipUsers(token: String): [VOIPUser]
@@ -129,6 +183,12 @@ const schema2 = buildSchema(`
       getKamarMe(token: String): KamarUser
       getKamarUser(token: String, id: String, fields: [String]): KamarUser
       getKamarUsers(token: String, type: String, fields: [String]): [KamarUser]
+      getNocoStaffMe(token: String): NocoStaff
+      getNocoStaffSingle(token: String, id: String, fields: [String]): NocoStaff
+      getNocoStaffAll(token: String, type: String, fields: [String]): [NocoStaff]
+      getNocoStudentMe(token: String): NocoStudent
+      getNocoStudent(token: String, id: String, fields: [String]): NocoStudent
+      getNocoStudents(token: String, type: String, fields: [String]): [NocoStudent]
     }
 
     type Mutation {
@@ -136,6 +196,12 @@ const schema2 = buildSchema(`
         deleteVoipUser(token: String, id: String): Output
         addPapercutUser(token: String, username: String, password: String, fullname: String, email: String, card: String, pin: String): Output
         deletePapercutUser(token: String, id: String): Output
+        addNocoStaff(token: String) : Output
+        addNocoStudent(token: String) : Output
+        deleteNocoStaff(token: String) : Output
+        deleteNocoStudent(token: String) : Output
+        updateNocoStaff(token: String, data: String, eid: String!) : Output
+        updateNocoStudent(token: String, Username: String, data: String) : Output
     }
 
 `);
