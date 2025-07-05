@@ -66,6 +66,9 @@ app.use('/voip', useVoipRouter)
 const useKamarRouter = require('./__routes/secure/kamar')
 app.use('/kamar', useKamarRouter)
 
+const useGoogleOneRouter = require('./__routes/secure/Google/updatepassword')
+app.use('/google1', useGoogleOneRouter)
+
 //Graphql Schema and Routes
 app.all(
   '/open_graphql',

@@ -23,6 +23,7 @@
     "express-basic-auth": "^1.2.1",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.0",
+    "googleapis": "^150.0.1",
     "graphql": "^16.10.0",
     "graphql-http": "^1.22.4",
     "js-base64": "^3.7.7",
