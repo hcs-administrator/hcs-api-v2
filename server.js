@@ -69,6 +69,9 @@ app.use('/kamar', useKamarRouter)
 const useGoogleOneRouter = require('./__routes/secure/Google/updatepassword')
 app.use('/google1', useGoogleOneRouter)
 
+const useMicrosoftOneRouter = require('./__routes/secure/Microsoft/updatepassword')
+app.use('/ms1', useMicrosoftOneRouter)
+
 //Graphql Schema and Routes
 app.all(
   '/open_graphql',
